@@ -1,0 +1,17 @@
+(set-logic HORN)
+(set-info :status sat)
+(declare-fun inv (Int Int Int Int ) Bool)
+
+(assert (inv 0 0 0 0))
+(assert (forall ((x Int) (z Int) (w Int) (y Int) (x1 Int) (y1 Int) (z1 Int) (w1 Int))
+  (=> (and (inv x y z w)
+           (< x 10000)
+           (= x1 (+ x w))
+           (= y1 (+ z 1))
+           (= z1 (- w 1))
+           (= w1 (+ y 1)))
+      (inv x1 y1 z1 w1))))
+(assert (forall ((y Int) (z Int) (w Int) (x Int))
+  (=> (and (inv x y z w) (not (>= x 0))) false)))
+(check-sat)
+

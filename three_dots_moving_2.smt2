@@ -1,0 +1,18 @@
+(set-logic HORN)
+(set-info :status sat)
+(declare-fun inv (Int Int Int Int ) Bool)
+
+(assert (forall ((x Int) (y Int) (K Int) (g Int))
+  (let ((a!1 (and (< x y)
+                  (>= g (+ (- K x) (- y x)))
+                  (>= g (- y x))
+                  (>= g (- y K)))))
+    (=> a!1 (inv x y K g)))))
+(assert (forall ((g Int) (x Int) (y Int) (x1 Int) (y1 Int) (K Int) (g1 Int))
+  (let ((a!1 (and (= x y) (= x1 (ite (> x K) (- x 1) (+ x 1))) (= y1 x1))))
+  (let ((a!2 (or a!1 (and (not (= x y)) (= x1 x) (= y1 (- y 1))))))
+    (=> (and (inv x y K g) (= g1 (- g 1)) (not (= y K)) a!2) (inv x1 y1 K g1))))))
+(assert (forall ((x Int) (y Int) (K Int) (g Int))
+  (=> (and (inv x y K g) (not (= y K)) (not (> g 0))) false)))
+(check-sat)
+
